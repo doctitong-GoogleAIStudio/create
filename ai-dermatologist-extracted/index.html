@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Dermatologist</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+      }
+    </script>
+    <link rel="stylesheet" href="https://aistudiocdn.com/react-image-crop@^11.0.6/dist/ReactCrop.css" />
+  <script type="importmap">
+{
+  "imports": {
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.25.0",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "react-image-crop": "https://aistudiocdn.com/react-image-crop@^11.0.6",
+    "jspdf": "https://aistudiocdn.com/jspdf@^2.5.1",
+    "html2canvas": "https://aistudiocdn.com/html2canvas@^1.4.1"
+  }
+}
+</script>
+<style>
+    @keyframes scan-loader-animation {
+      0% {
+        transform: translateY(0);
+      }
+      100% {
+        transform: translateY(84px); /* 80px height + 4px initial offset */
+      }
+    }
+    .scan-line-loader {
+      animation: scan-loader-animation 1.8s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+    @keyframes focus-reticle-animation {
+      0% {
+        transform: scale(1.2);
+        opacity: 1;
+        border-width: 2px;
+      }
+      80% {
+        opacity: 1;
+        border-width: 3px;
+      }
+      100% {
+        transform: scale(1);
+        opacity: 0;
+      }
+    }
+    .focus-reticle {
+      animation: focus-reticle-animation 1.2s ease-out forwards;
+    }
+</style>
+<link rel="stylesheet" href="/index.css">
+</head>
+  <body class="bg-gray-50 dark:bg-gray-900 font-sans antialiased">
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+  </body>
+</html>
