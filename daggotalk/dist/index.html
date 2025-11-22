@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/assets/icon-CK5lk848.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GeminiGlow</title>
+    <meta name="theme-color" content="#c5a78f">
+    <link rel="manifest" href="/assets/manifest-6n9nvGZO.json">
+    <script>
+      // On page load or when changing themes, best to add inline in `head` to avoid FOUC.
+      // This script checks for a saved theme in localStorage and applies it to prevent a theme flash.
+      if (localStorage.getItem('theme') === 'dark' || 
+          (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      // This configures Tailwind to use the 'class' strategy for dark mode.
+      // It must be defined after the Tailwind CSS script is loaded.
+      tailwind.config = {
+        darkMode: 'class',
+      };
+    </script>
+    <link rel="stylesheet" href="https://unpkg.com/react-image-crop/dist/ReactCrop.css" />
+    <style>
+      body {
+        background-color: #f0e7db;
+        transition: background-color 0.2s linear;
+      }
+      html.dark body {
+        background-color: #111827; /* gray-900 */
+      }
+      @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+      }
+      .animate-fade-in {
+        animation: fadeIn 0.3s ease-out forwards;
+      }
+    </style>
+
+<link rel="stylesheet" href="/index.css">
+  <script type="importmap">
+{
+  "imports": {
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.25.0",
+    "react-image-crop": "https://esm.sh/react-image-crop@11.0.5"
+  }
+}
+</script>
+  <script type="module" crossorigin src="/assets/index-Cu_XNN8s.js"></script>
+</head>
+  <body>
+    <div id="root"></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  </body>
+</html>

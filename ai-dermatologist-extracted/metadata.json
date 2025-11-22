@@ -1,0 +1,7 @@
+{
+  "name": "AI Dermatologist License Final",
+  "description": "Upload photos of skin lesions for an AI-powered analysis and preliminary diagnosis. This tool is for informational purposes and is not a substitute for professional medical advice.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
