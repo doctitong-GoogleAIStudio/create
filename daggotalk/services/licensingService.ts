@@ -170,6 +170,124 @@ export async function getInstallData(): Promise<{ installId: string; publicKeyJw
     return { installId, publicKeyJwkStr };
 }
 
+// --- Daily Usage Tracking ---
+
+interface DailyUsageData {
+  date: string; // YYYY-MM-DD format
+  count: number;
+}
+
+function getTodayDateString(): string {
+  return new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+}
+
+export function getDailyUsage(): DailyUsageData {
+  try {
+    const stored = localStorage.getItem(DAILY_USAGE_KEY);
+    if (stored) {
+      const usage: DailyUsageData = JSON.parse(stored);
+      const today = getTodayDateString();
+
+      // Reset count if it's a new day
+      if (usage.date !== today) {
+        return { date: today, count: 0 };
+      }
+
+      return usage;
+    }
+
+    return { date: getTodayDateString(), count: 0 };
+  } catch (error) {
+    console.error('Error reading daily usage:', error);
+    return { date: getTodayDateString(), count: 0 };
+  }
+}
+
+export function incrementDailyUsage(): number {
+  try {
+    const usage = getDailyUsage();
+    usage.count += 1;
+    localStorage.setItem(DAILY_USAGE_KEY, JSON.stringify(usage));
+    return usage.count;
+  } catch (error) {
+    console.error('Error incrementing daily usage:', error);
+    return 0;
+  }
+}
+
+export function canTranslate(isPremium: boolean): { canTranslate: boolean; remainingUsage: number } {
+  if (isPremium) {
+    return { canTranslate: true, remainingUsage: -1 }; // Unlimited for premium
+  }
+
+  const usage = getDailyUsage();
+  const remaining = Math.max(0, MAX_FREE_TRANSLATIONS - usage.count);
+
+  return {
+    canTranslate: remaining > 0,
+    remainingUsage: remaining
+  };
+}
+
+export function getRemainingUsage(isPremium: boolean): number {
+  if (isPremium) {
+    return -1; // Unlimited
+  }
+
+  const usage = getDailyUsage();
+  return Math.max(0, MAX_FREE_TRANSLATIONS - usage.count);
+}
+
+export function resetDailyUsage(): void {
+  localStorage.removeItem(DAILY_USAGE_KEY);
+}
+
+// --- Enhanced License Verification with Daily Usage ---
+
+export interface LicenseInfo {
+  isValid: boolean;
+  isPremium: boolean;
+  installationId: string;
+  expiryDate?: string;
+  remainingUsage: number;
+}
+
+export async function getLicenseInfo(): Promise<LicenseInfo> {
+  try {
+    const isPremium = await verifyStoredLicense();
+    const installId = getOrCreateInstallId();
+    const remainingUsage = getRemainingUsage(isPremium);
+
+    // Get expiry date from stored license if available
+    let expiryDate: string | undefined;
+    const licenseBlobStr = localStorage.getItem(LICENSE_KEY);
+    if (licenseBlobStr) {
+      try {
+        const { licenseData } = JSON.parse(licenseBlobStr);
+        expiryDate = licenseData.expiresAt;
+      } catch (error) {
+        console.error('Error parsing license for expiry date:', error);
+      }
+    }
+
+    return {
+      isValid: true,
+      isPremium,
+      installationId: installId,
+      expiryDate,
+      remainingUsage
+    };
+  } catch (error) {
+    console.error('Error getting license info:', error);
+    return {
+      isValid: false,
+      isPremium: false,
+      installationId: getOrCreateInstallId(),
+      remainingUsage: getRemainingUsage(false)
+    };
+  }
+}
+
 /**
  * Generates a license blob. (For admin use)
  * @param installId The user's installation ID.
@@ -185,7 +303,7 @@ export async function generateLicense(installId: string, publicKeyJwkStr: string
     expiresAt: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString(), // 1 year license
     type: 'premium',
   };
-  
+
   const dataToSign = JSON.stringify(licenseData) + publicKeyJwkStr;
   const signature = await digest(dataToSign);
 
@@ -193,6 +311,6 @@ export async function generateLicense(installId: string, publicKeyJwkStr: string
     licenseData,
     signature,
   };
-  
+
   return JSON.stringify(licenseBlob, null, 2);
 }
