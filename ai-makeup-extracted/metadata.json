@@ -1,0 +1,5 @@
+{
+  "name": "AI Makeup Match",
+  "description": "Upload a photo of yourself to receive personalized makeup recommendations from an AI-powered analysis of your skin tone, type, and undertone.",
+  "requestFramePermissions": []
+}
