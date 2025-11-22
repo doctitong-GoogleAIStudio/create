@@ -169,7 +169,7 @@ export const TranslationResult: React.FC<TranslationResultProps> = ({
         )}
 
         {/* Usage info for free tier */}
-        (!isPremium && remainingUsage !== undefined && (
+        {!isPremium && remainingUsage !== undefined && (
           <div className="text-xs text-center opacity-75 mb-4">
             {remainingUsage} translations remaining today
           </div>
