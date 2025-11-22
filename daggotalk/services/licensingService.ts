@@ -1,9 +1,11 @@
 
-const DB_NAME = 'GeminiGlowDB';
+const DB_NAME = 'DoggoTalkDB';
 const DB_VERSION = 1;
 const KEY_STORE_NAME = 'cryptoKeys';
 const INSTALL_ID_KEY = 'installId';
 const LICENSE_KEY = 'appLicense';
+const DAILY_USAGE_KEY = 'dailyUsage';
+const MAX_FREE_TRANSLATIONS = 5;
 
 // Helper to open IndexedDB
 function openDB(): Promise<IDBDatabase> {
