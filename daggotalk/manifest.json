@@ -1,0 +1,17 @@
+{
+  "name": "GeminiGlow",
+  "short_name": "GeminiGlow",
+  "description": "Upload a photo of yourself to receive personalized makeup recommendations from an AI-powered analysis of your skin tone, type, and undertone.",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#f0e7db",
+  "theme_color": "#c5a78f",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "48x48 72x72 96x96 128x128 256x256 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
